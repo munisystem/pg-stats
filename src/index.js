@@ -1,6 +1,7 @@
 'use strict'
 
 const pg = require('./pg');
+const objectAssign = require('object-assign');
 
 module.exports = (cn) => {
   const queries = {
@@ -24,7 +25,11 @@ module.exports = (cn) => {
   }
 
   return pg(cn, queries).then(results => {
-    return results;
+    let hash = {};
+    results.forEach(v => {
+      hash = objectAssign(hash, v);
+    });
+    return hash;
   }).catch(error => {
     throw error;
   });
